@@ -1,7 +1,7 @@
 const request = require("request");
 const args = process.argv.slice(2);
 
-const requestCatsAPI = cat => {
+const requestToCatsAPI = cat => {
   request(
     `https://api.thecatapi.com/v1/breeds/search?q=${cat}`,
     (err, res, body) => {
@@ -29,7 +29,7 @@ const breedFetcher = cats => {
   }
 
   for (const cat of cats) {
-    requestCatsAPI(cat);
+    requestToCatsAPI(cat);
   }
 };
 
