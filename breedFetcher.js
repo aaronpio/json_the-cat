@@ -1,36 +1,19 @@
 const request = require("request");
-const args = process.argv.slice(2);
 
-const requestToCatsAPI = cat => {
+const requestToCatsAPI = (cat, callback) => {
   request(
     `https://api.thecatapi.com/v1/breeds/search?q=${cat}`,
     (err, res, body) => {
       if (err) {
-        console.log("Error with URL");
-        return err;
+        callback(err, null);
       } else if (body.length <= 2) {
-        console.log("breed not found");
-        return;
+        callback(`(Non-existant Breed) ${err}`, null);
       } else {
         const data = JSON.parse(body);
-        console.log("\n-------------------------------------\n");
-        console.log(data);
-        console.log("\n-------------------------------------\n");
-        return data;
+        callback(null, data[0].description.trim());
       }
     }
   );
 };
 
-const breedFetcher = cats => {
-  if (cats.length < 1) {
-    console.log("Must enter atleast one breed");
-    return;
-  }
-
-  for (const cat of cats) {
-    requestToCatsAPI(cat);
-  }
-};
-
-breedFetcher(args);
+module.exports = { requestToCatsAPI };
